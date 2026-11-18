@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyName>EcoCore</AssemblyName>
+    <RootNamespace>EcoCore</RootNamespace>
+    <Version>1.0.0</Version>
+    <Product>节能核心 EcoCore</Product>
+    <Company>EcoCore</Company>
+    <Description>英特尔大小核笔记本续航优化工具</Description>
+    <SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <!-- 界面全部代码构建，不用 WinForms 设计器，故关闭设计器序列化/DPI 清单分析器 -->
+    <NoWarn>$(NoWarn);WFO1000;WFO0003;CS0414</NoWarn>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,28 @@
+# 构建产物
+bin/
+obj/
+src/**/bin/
+src/**/obj/
+dist/
+release/
+publish/
+
+# 工具链缓存
+.dotnet/
+.nuget/
+*.user
+*.suo
+
+# 本地凭据 / 分析残留
+.gh-token
+unpack/
+*.log
+selftest.log
+applytest.log
+stage.txt
+crash.log
+shot-crash.log
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
