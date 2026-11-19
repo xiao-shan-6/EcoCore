@@ -26,3 +26,9 @@ shot-crash.log
 # 系统垃圾
 Thumbs.db
 desktop.ini
+
+# 试跑数据（正式测量结果要提交，烟测不留）
+bench/smoke/
+bench/smoke-load/
+bench/diag/
+bench/elev-check/

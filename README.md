@@ -344,6 +344,47 @@ E 核（EfficiencyClass=0）: #258..265 LP0:2..9   #270..277 LP0:14..21
 
 ---
 
+## 省电效果实测（自己量的，有原始数据）
+
+测法：ACPI 直读电池放电功率（`BatteryMeter`），**配对 A/B** —— 每轮交替跑「原样 → EcoCore」共 3 轮，
+抵消机器发热造成的漂移；每阶段稳定 20 s 后连续采 75 s，2 秒一个点。全程电池供电、亮度固定 51%。
+
+**轻负载（2 个忙循环进程，模拟写代码时的索引/编译，CPU 10~12%）**
+
+| 回合 | 原样 | EcoCore 极致省电 | 差值 |
+| --- | --- | --- | --- |
+| 1 | 25978 mW | 13556 mW | −47.8% |
+| 2 | 31093 mW | 11744 mW | −62.2% |
+| 3 | 37024 mW | 11827 mW | −68.1% |
+| 平均 | **31365 mW** | **12376 mW** | **−60.5%** |
+
+**CPU 占用率两边一样（10~12%），做同样多的活，功耗差六成。** 82 Wh 电池估算 2.61 h → 6.63 h。
+
+**空闲（不额外加负载，CPU 4.5~4.8%）**：11.09 W 对 11.10~11.36 W，**没有差别** —— 机器没事可做时它不会乱动。
+
+为什么差这么多：Windows 会把「有点忙」的进程丢给 P 核，而 P 核在移动端为了单核性能把频率冲到最高，
+**两颗 P 核就能吃掉 30 W 以上**；EcoCore 把这些进程的 CPU Set 限制到 E 核并打上 EcoQoS，
+同样的活由 E 核以低得多的功耗完成。
+
+自己复现：
+
+```powershell
+# 轻负载，3 轮配对
+EcoCore.exe --bench --ab --profile maxsaving --rounds 3 --seconds 75 --settle 20 --load 2 --out bench\admin-maxsaving
+
+# 空闲对照
+EcoCore.exe --bench --ab --profile maxsaving --rounds 3 --seconds 75 --settle 20 --out bench\admin-idle
+
+# 只看当前电池状态
+EcoCore.exe --battery
+```
+
+产物：`meta.txt`（环境快照 + 进程表）、`samples.csv`（逐点原始数据，含当时前台应用与窗口标题）、
+`summary.txt`（配对对比 + 续航估算）、`processes-before.csv`。
+上面这组数据的完整报告见仓库里的 `bench/报告.md`。
+
+---
+
 ## 兼容性：它怎么自动认 CPU
 
 **没有任何硬编码的核号列表。** 每次启动现场探测，换一台机器直接能用：

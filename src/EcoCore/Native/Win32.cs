@@ -121,6 +121,12 @@ internal static class Win32
 
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool GetProcessInformation(
+        IntPtr hProcess, int processInformationClass,
+        ref PROCESS_POWER_THROTTLING_STATE processInformation, uint processInformationSize);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool SetThreadInformation(
         IntPtr hThread, int threadInformationClass,
         ref PROCESS_POWER_THROTTLING_STATE threadInformation, uint threadInformationSize);

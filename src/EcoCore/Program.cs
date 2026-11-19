@@ -44,6 +44,39 @@ internal static class Program
         if (args.Any(a => a.Equals("--applytest", StringComparison.OrdinalIgnoreCase)))
             return SelfTest.ApplyTest();
 
+        // 实机功耗对比：各方案逐个跑，读 ACPI 电池放电功率，出 CSV + 汇总
+        if (args.Any(a => a.Equals("--bench", StringComparison.OrdinalIgnoreCase)))
+            return Bench.Run(args);
+
+        // 只读一次电池/亮度，用来确认能不能测
+        if (args.Any(a => a.Equals("--battery", StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.WriteLine(BatteryMeter.Diagnose());
+            Console.WriteLine($"屏幕亮度: {BatteryMeter.Brightness()?.ToString() ?? "读取失败"}%");
+            var bs = BatteryMeter.Read();
+            Console.WriteLine($"设备: {BatteryMeter.DevicePath}");
+            Console.WriteLine($"容量: {bs.CapacityMw} mW / 满充 {bs.FullCapacityMw} mW  ({bs.Percent}%)  放电={bs.Discharging} 充电={bs.Charging} 接电源={bs.OnAc}");
+            Console.WriteLine($"原始状态 ({BatteryMeter.RawReturned} 字节): {BatteryMeter.RawStatus}");
+            return 0;
+        }
+
+        // 可控负载进程：给 --bench 当"后台应用"用，跑固定时长的忙循环
+        if (args.Any(a => a.Equals("--busyload", StringComparison.OrdinalIgnoreCase)))
+        {
+            int sec = 600;
+            int si = Array.FindIndex(args, a => a.Equals("--seconds", StringComparison.OrdinalIgnoreCase));
+            if (si >= 0 && si + 1 < args.Length && int.TryParse(args[si + 1], out int v)) sec = v;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            double acc = 0;
+            while (sw.Elapsed.TotalSeconds < sec)
+            {
+                for (int k = 0; k < 200000; k++) acc += Math.Sqrt(k % 97) * 1.000001;
+                if (acc > 1e18) acc = 0;   // 防止被优化掉
+            }
+            Console.WriteLine(acc);
+            return 0;
+        }
+
         // 精细调节第二界面的截图
         int shot3Idx = Array.FindIndex(args, a => a.Equals("--shot3", StringComparison.OrdinalIgnoreCase));
         if (shot3Idx >= 0)

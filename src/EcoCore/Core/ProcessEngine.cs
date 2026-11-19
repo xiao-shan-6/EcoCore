@@ -81,8 +81,23 @@ public sealed class ProcessEngine
         finally { Win32.CloseHandle(h); }
     }
 
-    // ───────────────────── 2. CPU Set 绑定 ─────────────────────
+    /// <summary>读回进程当前的效率模式状态（EcoQoS 是否打开）。读不到返回 false。</summary>
+    public static bool ReadEcoQos(int pid)
+    {
+        IntPtr h = Win32.OpenProcess(Win32.PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+        if (h == IntPtr.Zero) return false;
+        try
+        {
+            var state = default(Win32.PROCESS_POWER_THROTTLING_STATE);
+            if (!Win32.GetProcessInformation(h, Win32.ProcessPowerThrottling, ref state,
+                    (uint)Marshal.SizeOf<Win32.PROCESS_POWER_THROTTLING_STATE>()))
+                return false;
+            return (state.StateMask & Win32.PROCESS_POWER_THROTTLING_EXECUTION_SPEED) != 0;
+        }
+        finally { Win32.CloseHandle(h); }
+    }
 
+    // ───────────────────── 2. CPU Set 绑定 ─────────────────────
     /// <summary>
     /// 打开进程用于 CPU Set 操作。SetProcessDefaultCpuSets 认的是 PROCESS_SET_LIMITED_INFORMATION，
     /// 只给 PROCESS_SET_INFORMATION 会直接被判 AccessDenied（实测：mask=0x0200 → err=5，mask=0x2000 → OK）。
