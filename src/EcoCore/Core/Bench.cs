@@ -120,23 +120,20 @@ public static class Bench
         bool ab = args.Contains("--ab");
         int rounds = Math.Max(1, GetInt(args, "--rounds", 3));
         string wantProfile = GetStr(args, "--profile") ?? "maxsaving";
-        var target = EcoProfile.Presets().FirstOrDefault(p => p.Name.Equals(wantProfile, StringComparison.OrdinalIgnoreCase)
-            || p.Name == wantProfile) ?? wantProfile switch
-        {
-            "balanced" => EcoProfile.Balanced(),
-            "maxsaving" => EcoProfile.MaxSaving(),
-            "light" => EcoProfile.LightSaving(),
-            "performance" => EcoProfile.Performance(),
-            _ => EcoProfile.MaxSaving(),
-        };
+        var profileList = (GetStr(args, "--profiles") ?? "")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(ResolveProfile).ToList();
+        if (profileList.Count == 0) profileList.Add(ResolveProfile(wantProfile));
+        var target = profileList[0];
 
         var phases = ab
             ? Enumerable.Range(1, rounds)
                 .SelectMany(r => new (string Key, string Title, EcoProfile? Profile)[]
-                {
-                    ($"base{r}", $"第 {r} 轮 原样（不用 EcoCore）", null),
-                    ($"test{r}", $"第 {r} 轮 EcoCore「{target.Name}」", target.Clone()),
-                })
+                    {
+                        ($"base{r}", $"第 {r} 轮 原样（不用 EcoCore）", null),
+                    }
+                    .Concat(profileList.Select(p =>
+                        ($"test{r}-{p.Name}", $"第 {r} 轮 EcoCore「{p.Name}」", (EcoProfile?)p.Clone()))))
                 .ToArray()
             : new (string Key, string Title, EcoProfile? Profile)[]
         {
@@ -270,28 +267,31 @@ public static class Bench
         if (ab)
         {
             // 配对分析：同一轮里的 base 与 test 相减，抵消机器发热/后台波动造成的整体漂移
-            var pairs = new List<(int Round, double Base, double Test)>();
-            for (int r = 1; r <= rounds; r++)
+            foreach (var prof in profileList)
             {
-                var b = rows.FirstOrDefault(x => x.Name == $"base{r}");
-                var t = rows.FirstOrDefault(x => x.Name == $"test{r}");
-                if (b?.Rates.Count > 0 && t?.Rates.Count > 0)
-                    pairs.Add((r, b.Rates.Average(), t.Rates.Average()));
-            }
-            summary.AppendLine($"=== 配对对比（每个回合交替「原样 → EcoCore {target.Name}」，抵消漂移）===");
-            summary.AppendLine("回合   原样          EcoCore       差值       百分比");
-            foreach (var (r, b, t) in pairs)
-                summary.AppendLine(string.Format(CultureInfo.InvariantCulture,
-                    "{0,-5} {1,10:F0} mW {2,10:F0} mW {3,9:F0} mW {4,9:F1}%", r, b, t, t - b, (t - b) / b * 100));
-            if (pairs.Count > 0)
-            {
-                double mb = pairs.Average(x => x.Base), mt = pairs.Average(x => x.Test);
+                var pairs = new List<(int Round, double Base, double Test)>();
+                for (int r = 1; r <= rounds; r++)
+                {
+                    var b = rows.FirstOrDefault(x => x.Name == $"base{r}");
+                    var t = rows.FirstOrDefault(x => x.Name == $"test{r}-{prof.Name}");
+                    if (b?.Rates.Count > 0 && t?.Rates.Count > 0)
+                        pairs.Add((r, b.Rates.Average(), t.Rates.Average()));
+                }
+                summary.AppendLine($"=== 配对对比：原样 → EcoCore「{prof.Name}」（每回合交替，抵消漂移）===");
+                summary.AppendLine("回合   原样          EcoCore       差值       百分比");
+                foreach (var (r, b, t) in pairs)
+                    summary.AppendLine(string.Format(CultureInfo.InvariantCulture,
+                        "{0,-5} {1,10:F0} mW {2,10:F0} mW {3,9:F0} mW {4,9:F1}%", r, b, t, t - b, (t - b) / b * 100));
+                if (pairs.Count > 0)
+                {
+                    double mb = pairs.Average(x => x.Base), mt = pairs.Average(x => x.Test);
+                    summary.AppendLine();
+                    summary.AppendLine($"平均：原样 {mb:F0} mW → 「{prof.Name}」{mt:F0} mW，变化 {(mt - mb) / mb * 100:F1}%（{mt - mb:F0} mW）");
+                    summary.AppendLine($"续航估算（82 Wh 电池）：原样 {82.0 / (mb / 1000):F2} 小时 → {82.0 / (mt / 1000):F2} 小时");
+                }
+                else summary.AppendLine("配对数据不足，无法给出结论。");
                 summary.AppendLine();
-                summary.AppendLine($"平均：原样 {mb:F0} mW → EcoCore「{target.Name}」{mt:F0} mW，变化 {(mt - mb) / mb * 100:F1}%（{mt - mb:F0} mW）");
-                double wh = 82.0;   // 本机电池 82112 mWh
-                summary.AppendLine($"续航估算（{wh:F0} Wh 电池）：原样 {wh / (mb / 1000):F2} 小时 → {(wh / (mt / 1000)):F2} 小时");
             }
-            else summary.AppendLine("配对数据不足，无法给出结论。");
         }
         else if (baseAvg > 0)
         {
@@ -314,6 +314,21 @@ public static class Bench
         Console.WriteLine($"文件：{outDir}");
         Console.WriteLine($"耗时：{sw.Elapsed.TotalMinutes:F1} 分钟");
         return 0;
+    }
+
+    private static EcoProfile ResolveProfile(string want)
+    {
+        var byName = EcoProfile.Presets().FirstOrDefault(p =>
+            p.Name.Equals(want, StringComparison.OrdinalIgnoreCase) || p.Name == want);
+        if (byName != null) return byName;
+        return want.ToLowerInvariant() switch
+        {
+            "balanced" or "均衡" => EcoProfile.Balanced(),
+            "maxsaving" or "极致" or "极致省电" => EcoProfile.MaxSaving(),
+            "light" or "轻度" or "轻度省电" => EcoProfile.LightSaving(),
+            "performance" or "性能" => EcoProfile.Performance(),
+            _ => EcoProfile.MaxSaving(),
+        };
     }
 
     private sealed class ProcRow
