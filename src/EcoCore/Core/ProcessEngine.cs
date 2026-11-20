@@ -88,7 +88,8 @@ public sealed class ProcessEngine
         if (h == IntPtr.Zero) return false;
         try
         {
-            var state = default(Win32.PROCESS_POWER_THROTTLING_STATE);
+            // Version 必须先填 1，否则 GetProcessInformation 直接返回 ERROR_INVALID_PARAMETER（实测踩到过）。
+            var state = Win32.PROCESS_POWER_THROTTLING_STATE.Create(false);
             if (!Win32.GetProcessInformation(h, Win32.ProcessPowerThrottling, ref state,
                     (uint)Marshal.SizeOf<Win32.PROCESS_POWER_THROTTLING_STATE>()))
                 return false;

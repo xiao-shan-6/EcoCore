@@ -60,6 +60,55 @@ internal static class Program
             return 0;
         }
 
+        // 诊断：查某个（或几个）进程当前真实的 CPU Set 与 EcoQoS 状态
+        // 用途：验证「钉到 E 核」到底有没有落到内核里，而不是只看返回值
+        if (args.Any(a => a.Equals("--pidinfo", StringComparison.OrdinalIgnoreCase)))
+        {
+            int i0 = Array.FindIndex(args, a => a.Equals("--pidinfo", StringComparison.OrdinalIgnoreCase));
+            Console.WriteLine("pid     进程               EcoQoS  CPU Set");
+            for (int j = i0 + 1; j < args.Length && int.TryParse(args[j], out int pid); j++)
+            {
+                string name;
+                try { name = System.Diagnostics.Process.GetProcessById(pid).ProcessName; } catch { name = "?"; }
+                var sets = ProcessEngine.ReadProcessCpuSets(pid);
+                bool eco = ProcessEngine.ReadEcoQos(pid);
+                string ids = sets.Length == 0 ? "（读不到）" : string.Join(",", sets.OrderBy(x => x));
+                Console.WriteLine($"{pid,-8} {name,-18} {eco,-6} {ids}");
+            }
+            return 0;
+        }
+
+        // 手工验证用：按「极致省电」钉住所有后台进程并保持（不自动还原，配合 --unpinall）
+        if (args.Any(a => a.Equals("--pinall", StringComparison.OrdinalIgnoreCase)))
+        {
+            var cp = new Coordinator();
+            Console.WriteLine(Coordinator.IsElevated() ? "权限: 管理员（电源层也会写）" : "权限: 普通用户（只跑进程层）");
+            Console.WriteLine(cp.Apply(EcoProfile.MaxSaving(), out string psum) ? psum : "失败: " + psum);
+            return 0;
+        }
+
+        if (args.Any(a => a.Equals("--unpinall", StringComparison.OrdinalIgnoreCase)))
+        {
+            // 绑核不跨进程持久：新进程的 Coordinator 不知道上一轮钉过谁，
+            // 所以这里直接把所有进程的 CPU Set 清空（= 允许全部核心）、并关掉 EcoQoS。
+            int cleared = 0, ecoOff = 0, denied = 0;
+            foreach (var p in System.Diagnostics.Process.GetProcesses())
+            {
+                using (p)
+                {
+                    if (p.Id == Environment.ProcessId || p.Id <= 4) continue;
+                    if (ProcessEngine.SetProcessCpuSets(p.Id, null, out string d1)) cleared++;
+                    else if (d1.Contains("拒绝") || d1.Contains("Access")) denied++;
+                    if (ProcessEngine.SetEcoQos(p.Id, false, out _)) ecoOff++;
+                }
+            }
+            var cp = new Coordinator();
+            cp.Restore(out string rsum);
+            Console.WriteLine($"清除 CPU Set 绑定: {cleared} 个进程（拒绝 {denied} 个），关闭 EcoQoS: {ecoOff} 个");
+            Console.WriteLine(rsum);
+            return 0;
+        }
+
         // 可控负载进程：给 --bench 当"后台应用"用，跑固定时长的忙循环
         if (args.Any(a => a.Equals("--busyload", StringComparison.OrdinalIgnoreCase)))
         {
