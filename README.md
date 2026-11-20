@@ -366,6 +366,19 @@ E 核（EfficiencyClass=0）: #258..265 LP0:2..9   #270..277 LP0:14..21
 **两颗 P 核就能吃掉 30 W 以上**；EcoCore 把这些进程的 CPU Set 限制到 E 核并打上 EcoQoS，
 同样的活由 E 核以低得多的功耗完成。
 
+### 但前提是：别把系统自己的省电模式关掉
+
+同一台机器、同样 2 线程轻负载，把厂家自带的**省电模式关掉**再测一遍（方案仍是 Silent、亮度 51%、电池放电）：
+
+| 场景 | 原样 | EcoCore（仅进程层） | 降幅 |
+| --- | --- | --- | --- |
+| 省电模式开 | 31.4 W | 12.4 W | **−60.5%** |
+| 省电模式关 | 42.5 W | 36.2 W | **−14.9%** |
+
+- 原样功耗整体抬高 **35%**（31.4 → 42.5 W）：没有 EC / 系统的频率上限，2 个线程也能把封装推到 42 W
+- 只靠进程层时收益从 −60% 掉到 **−15%**：系统限频消失后，把线程挪到 E 核省下的只是 P/E 能效差本身
+- 也就是说，**关掉省电模式的状态下，真正的主力是电源层（频率上限 / 睿频 / EPP），而它必须管理员权限**
+
 自己复现：
 
 ```powershell
@@ -375,8 +388,21 @@ EcoCore.exe --bench --ab --profile maxsaving --rounds 3 --seconds 75 --settle 20
 # 空闲对照
 EcoCore.exe --bench --ab --profile maxsaving --rounds 3 --seconds 75 --settle 20 --out bench\admin-idle
 
+# 一次对比多个方案（均衡 / 极致 / 轻度）
+EcoCore.exe --bench --ab --profiles balanced,maxsaving,light --rounds 2 --seconds 75 --settle 20 --load 2 --out bench\admin-profiles
+
 # 只看当前电池状态
 EcoCore.exe --battery
+
+# 读某个进程真实的 CPU Set / EcoQoS（验证绑核到底有没有落地）
+EcoCore.exe --pidinfo <pid>
+```
+
+手工验证与应用：
+
+```powershell
+EcoCore.exe --pinall      # 按「极致省电」钉住所有后台进程并保持
+EcoCore.exe --unpinall    # 清除所有进程的 CPU Set 绑定、关掉 EcoQoS、还原电源方案
 ```
 
 产物：`meta.txt`（环境快照 + 进程表）、`samples.csv`（逐点原始数据，含当时前台应用与窗口标题）、
