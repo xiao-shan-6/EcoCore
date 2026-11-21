@@ -1,0 +1,237 @@
+﻿time,phase,elapsed_s,rate_mw,percent,on_ac,cpu_pct,brightness,fg_app,fg_title
+19:02:10,base1,2,42605,96,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:12,base1,4,42094,96,0,14.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:14,base1,6,44473,96,0,12.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:16,base1,8,44170,96,0,15.9,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:18,base1,10,43435,96,0,21.2,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:20,base1,12,44601,96,0,14.1,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:22,base1,14,44601,95,0,12.8,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:24,base1,16,44777,95,0,11.8,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:27,base1,19,45831,95,0,11.4,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:29,base1,21,44026,95,0,13.6,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:31,base1,23,43291,95,0,14.6,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:33,base1,25,43403,95,0,17.4,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:35,base1,27,42573,95,0,11.2,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:37,base1,29,42174,95,0,11.4,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:39,base1,31,43387,95,0,12.1,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:41,base1,33,43132,95,0,12.3,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:43,base1,35,42749,95,0,11.2,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:45,base1,37,42653,95,0,15.1,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:47,base1,39,42078,95,0,12.6,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:49,base1,41,43036,95,0,13.1,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:51,base1,43,44138,95,0,11.9,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:02:53,base1,45,44585,95,0,16.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:55,base1,47,45032,95,0,14.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:57,base1,49,44793,95,0,15.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:02:59,base1,51,44713,95,0,13.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:01,base1,53,43579,95,0,20.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:03,base1,55,43196,95,0,22.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:05,base1,57,43723,95,0,21.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:07,base1,59,47395,95,0,24.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:09,base1,61,49104,95,0,13.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:27,test1-均衡,3,15218,95,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:29,test1-均衡,5,13126,95,0,13.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:31,test1-均衡,7,12950,95,0,16.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:33,test1-均衡,9,13781,95,0,15.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:35,test1-均衡,11,13765,95,0,14.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:37,test1-均衡,13,14036,95,0,12.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:39,test1-均衡,15,14004,95,0,13.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:41,test1-均衡,17,13254,95,0,13.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:44,test1-均衡,19,13238,95,0,11.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:46,test1-均衡,21,13046,95,0,13.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:48,test1-均衡,23,12871,94,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:50,test1-均衡,25,13046,94,0,15.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:52,test1-均衡,27,13238,94,0,14.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:54,test1-均衡,29,12918,94,0,10.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:56,test1-均衡,31,13366,94,0,10.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:03:58,test1-均衡,33,12839,94,0,10.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:00,test1-均衡,36,12344,94,0,10.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:02,test1-均衡,38,12871,94,0,16.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:04,test1-均衡,40,12360,94,0,10.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:06,test1-均衡,42,12471,94,0,10.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:08,test1-均衡,44,12679,94,0,10.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:10,test1-均衡,46,12519,94,0,10.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:12,test1-均衡,48,12168,94,0,10.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:14,test1-均衡,50,12104,94,0,9.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:17,test1-均衡,52,12008,94,0,10.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:19,test1-均衡,54,11833,94,0,13.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:21,test1-均衡,56,12120,94,0,15.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:23,test1-均衡,58,12695,94,0,14.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:25,test1-均衡,60,12631,94,0,11.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:43,test1-极致省电,2,11928,94,0,11.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:45,test1-极致省电,5,12024,94,0,11.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:47,test1-极致省电,7,11785,94,0,10.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:49,test1-极致省电,9,11848,94,0,10.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:51,test1-极致省电,11,11625,94,0,11.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:53,test1-极致省电,13,11689,94,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:55,test1-极致省电,15,11833,94,0,12.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:57,test1-极致省电,17,12727,94,0,12.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:04:59,test1-极致省电,19,13334,94,0,15.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:01,test1-极致省电,21,13525,94,0,15.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:03,test1-极致省电,23,13972,94,0,15.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:05,test1-极致省电,25,13270,94,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:08,test1-极致省电,27,12998,94,0,16.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:10,test1-极致省电,29,13142,94,0,13.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:12,test1-极致省电,31,12982,94,0,16.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:14,test1-极致省电,33,12679,94,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:16,test1-极致省电,36,12503,94,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:18,test1-极致省电,38,12264,94,0,14.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:20,test1-极致省电,40,12232,94,0,16.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:22,test1-极致省电,42,12375,94,0,11.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:24,test1-极致省电,44,12168,94,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:26,test1-极致省电,46,13685,94,0,9.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:28,test1-极致省电,48,15394,94,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:30,test1-极致省电,50,18635,94,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:33,test1-极致省电,52,20392,94,0,12.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:35,test1-极致省电,54,22963,94,0,9.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:37,test1-极致省电,56,22947,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:39,test1-极致省电,58,23011,94,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:41,test1-极致省电,60,23123,94,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:05:58,test1-轻度省电,2,22196,94,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:00,test1-轻度省电,4,21909,94,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:02,test1-轻度省电,6,21765,94,0,12.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:04,test1-轻度省电,8,22787,94,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:06,test1-轻度省电,10,22851,94,0,9.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:08,test1-轻度省电,12,22739,94,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:10,test1-轻度省电,14,23091,94,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:12,test1-轻度省电,16,22196,94,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:14,test1-轻度省电,19,22180,94,0,9.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:16,test1-轻度省电,21,22612,94,0,9.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:18,test1-轻度省电,23,22372,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:20,test1-轻度省电,25,22644,94,0,9.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:22,test1-轻度省电,27,22644,94,0,8.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:24,test1-轻度省电,29,22196,94,0,9.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:26,test1-轻度省电,31,22101,94,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:28,test1-轻度省电,33,22005,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:31,test1-轻度省电,35,21350,94,0,9.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:33,test1-轻度省电,37,22164,94,0,13.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:35,test1-轻度省电,39,22548,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:37,test1-轻度省电,41,22516,94,0,9.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:39,test1-轻度省电,43,22707,94,0,9.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:41,test1-轻度省电,45,21845,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:43,test1-轻度省电,47,21190,94,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:45,test1-轻度省电,49,20823,93,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:47,test1-轻度省电,52,20855,93,0,8.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:49,test1-轻度省电,54,20935,93,0,9.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:51,test1-轻度省电,56,21126,93,0,8.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:53,test1-轻度省电,58,21446,93,0,8.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:55,test1-轻度省电,60,21733,93,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:06:57,test1-轻度省电,62,19593,93,0,9.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:15,base2,2,36521,93,0,9.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:17,base2,4,39124,93,0,10.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:19,base2,6,39411,93,0,10.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:21,base2,8,41742,93,0,10.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:23,base2,10,40848,93,0,10.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:25,base2,12,39507,93,0,10.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:27,base2,14,36457,93,0,9.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:29,base2,16,34892,93,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:32,base2,19,34109,93,0,11.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:34,base2,21,36201,93,0,15.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:36,base2,23,37606,93,0,13.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:38,base2,25,40401,93,0,14.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:40,base2,27,42445,93,0,12.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:42,base2,29,43307,93,0,10.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:44,base2,31,43260,93,0,9.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:46,base2,33,43675,93,0,10.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:48,base2,35,43132,93,0,10.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:50,base2,37,43100,93,0,11.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:52,base2,39,43419,93,0,9.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:54,base2,41,43435,93,0,9.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:56,base2,43,43483,93,0,10.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:07:58,base2,45,43291,93,0,10.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:00,base2,47,43244,93,0,10.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:02,base2,49,43068,93,0,13.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:05,base2,52,42780,93,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:07,base2,54,42269,92,0,11.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:09,base2,56,42126,92,0,11.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:11,base2,58,42365,92,0,12.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:13,base2,60,42285,92,0,12.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:15,base2,62,43100,92,0,11.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:32,test2-均衡,2,13765,92,0,16.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:34,test2-均衡,5,14068,92,0,17.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:36,test2-均衡,7,14132,92,0,14.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:38,test2-均衡,9,14451,92,0,17.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:40,test2-均衡,11,14340,92,0,12.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:42,test2-均衡,13,13813,92,0,12.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:44,test2-均衡,15,13685,92,0,12.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:46,test2-均衡,17,13078,92,0,14.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:49,test2-均衡,19,13158,92,0,15.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:51,test2-均衡,21,13350,92,0,14.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:53,test2-均衡,23,13621,92,0,13.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:55,test2-均衡,25,13733,92,0,14.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:57,test2-均衡,27,13350,92,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:08:59,test2-均衡,29,13254,92,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:01,test2-均衡,31,12918,92,0,14.3,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:03,test2-均衡,33,13541,92,0,19.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:05,test2-均衡,36,13685,92,0,13.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:07,test2-均衡,38,14308,92,0,17.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:09,test2-均衡,40,14515,92,0,13.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:11,test2-均衡,42,14404,92,0,16.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:13,test2-均衡,44,13908,92,0,11.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:16,test2-均衡,46,13350,92,0,13.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:18,test2-均衡,48,13318,92,0,14.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:20,test2-均衡,50,13397,92,0,17.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:22,test2-均衡,52,13813,92,0,10.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:24,test2-均衡,54,14164,92,0,11.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:26,test2-均衡,56,14515,92,0,10.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:28,test2-均衡,58,16240,92,0,9.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:30,test2-均衡,60,18172,92,0,9.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:48,test2-极致省电,3,13829,92,0,13.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:50,test2-极致省电,5,13940,92,0,15.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:52,test2-极致省电,7,14164,92,0,13.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:54,test2-极致省电,9,14276,92,0,14.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:56,test2-极致省电,11,14467,92,0,14.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:09:58,test2-极致省电,13,14627,92,0,13.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:00,test2-极致省电,15,14803,92,0,15.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:02,test2-极致省电,17,14723,92,0,17.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:04,test2-极致省电,19,14611,92,0,14.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:06,test2-极致省电,21,14946,92,0,18.0,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:08,test2-极致省电,23,14212,92,0,11.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:11,test2-极致省电,25,14212,92,0,16.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:13,test2-极致省电,27,13829,92,0,13.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:15,test2-极致省电,29,13318,92,0,13.8,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:17,test2-极致省电,31,13110,92,0,15.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:19,test2-极致省电,33,13286,92,0,14.7,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:21,test2-极致省电,36,13142,92,0,11.6,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:23,test2-极致省电,38,12918,92,0,11.4,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:25,test2-极致省电,40,14515,92,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:27,test2-极致省电,42,17629,92,0,8.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:29,test2-极致省电,44,19258,92,0,9.1,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:31,test2-极致省电,46,20727,92,0,11.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:33,test2-极致省电,48,21590,92,0,13.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:35,test2-极致省电,50,20120,92,0,9.5,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:38,test2-极致省电,52,20328,92,0,11.2,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:10:40,test2-极致省电,54,19673,92,0,19.3,51,explorer,vibe_coding - 文件资源管理器
+19:10:42,test2-极致省电,56,19961,92,0,12.6,51,explorer,vibe_coding - 文件资源管理器
+19:10:44,test2-极致省电,58,21606,92,0,9.3,51,explorer,vibe_coding - 文件资源管理器
+19:10:46,test2-极致省电,60,21893,92,0,9.9,51,explorer,vibe_coding - 文件资源管理器
+19:11:03,test2-轻度省电,3,22404,91,0,22.7,51,explorer,vibe_coding - 文件资源管理器
+19:11:05,test2-轻度省电,5,19019,91,0,19.6,51,explorer,vibe_coding - 文件资源管理器
+19:11:07,test2-轻度省电,7,16639,91,0,12.5,51,localsend_app,打开
+19:11:09,test2-轻度省电,9,14899,91,0,12.0,51,localsend_app,打开
+19:11:11,test2-轻度省电,11,15346,91,0,10.3,51,localsend_app,LocalSend
+19:11:13,test2-轻度省电,13,16543,91,0,10.6,51,localsend_app,LocalSend
+19:11:15,test2-轻度省电,15,18332,91,0,10.6,51,localsend_app,LocalSend
+19:11:17,test2-轻度省电,17,19961,91,0,8.9,51,localsend_app,LocalSend
+19:11:20,test2-轻度省电,19,20520,91,0,10.0,51,localsend_app,LocalSend
+19:11:22,test2-轻度省电,21,21733,91,0,9.9,51,localsend_app,LocalSend
+19:11:24,test2-轻度省电,23,21941,91,0,8.7,51,localsend_app,LocalSend
+19:11:26,test2-轻度省电,25,22979,91,0,9.0,51,localsend_app,LocalSend
+19:11:28,test2-轻度省电,27,23458,91,0,9.4,51,localsend_app,LocalSend
+19:11:30,test2-轻度省电,29,22835,91,0,8.7,51,localsend_app,LocalSend
+19:11:32,test2-轻度省电,31,22739,91,0,12.0,51,localsend_app,LocalSend
+19:11:34,test2-轻度省电,33,21526,91,0,9.8,51,localsend_app,LocalSend
+19:11:36,test2-轻度省电,35,20903,91,0,9.1,51,localsend_app,LocalSend
+19:11:38,test2-轻度省电,38,20679,91,0,9.7,51,localsend_app,LocalSend
+19:11:40,test2-轻度省电,40,20695,91,0,9.1,51,localsend_app,LocalSend
+19:11:42,test2-轻度省电,42,21717,91,0,9.0,51,localsend_app,LocalSend
+19:11:44,test2-轻度省电,44,21813,91,0,8.9,51,localsend_app,LocalSend
+19:11:46,test2-轻度省电,46,21717,91,0,9.0,51,localsend_app,LocalSend
+19:11:48,test2-轻度省电,48,21526,91,0,8.9,51,localsend_app,LocalSend
+19:11:50,test2-轻度省电,50,21398,91,0,9.2,51,localsend_app,LocalSend
+19:11:53,test2-轻度省电,52,20871,91,0,10.2,51,chrome,下载记录 - Google Chrome
+19:11:55,test2-轻度省电,54,21478,91,0,10.4,51,EcoCore,节能核心 EcoCore
+19:11:57,test2-轻度省电,56,21095,91,0,9.6,51,chrome,下载记录 - Google Chrome
+19:11:59,test2-轻度省电,58,20488,91,0,11.9,51,DeepSeek Harness,学习让智能小车动起来 — DeepSeek Harness
+19:12:01,test2-轻度省电,60,19849,91,0,21.1,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
+19:12:03,test2-轻度省电,62,19546,91,0,25.2,51,DeepSeek Harness,FlexCore 解包与续航优化 — DeepSeek Harness
