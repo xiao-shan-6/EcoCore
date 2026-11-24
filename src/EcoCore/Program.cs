@@ -146,6 +146,39 @@ internal static class Program
             return SelfTest.Shot2(outPath2);
         }
 
+        // 开机自启管理（控制台）：--autostart status|on|off
+        int asIdx = Array.FindIndex(args, a => a.Equals("--autostart", StringComparison.OrdinalIgnoreCase));
+        if (asIdx >= 0)
+        {
+            string what = asIdx + 1 < args.Length ? args[asIdx + 1].ToLowerInvariant() : "status";
+            switch (what)
+            {
+                case "on":
+                case "enable":
+                    Console.WriteLine(AutoStart.Enable(out string en) ? "[OK] " + en : "[FAIL] " + en);
+                    break;
+                case "off":
+                case "disable":
+                    Console.WriteLine(AutoStart.Disable(out string dis) ? "[OK] " + dis : "[FAIL] " + dis);
+                    break;
+                default:
+                    var mode = AutoStart.Detect(out string det);
+                    Console.WriteLine($"模式: {mode}");
+                    Console.WriteLine($"状态: {det}");
+                    Console.WriteLine($"命令: {AutoStart.CommandLine}");
+                    break;
+            }
+            return 0;
+        }
+
+        // 开机自启拉起时：最小化到托盘
+        if (args.Any(a => a.Equals("--tray", StringComparison.OrdinalIgnoreCase)))
+            MainForm.StartHiddenOnStart = true;
+
+        // 开机自启拉起时：重新应用上次的方案（进程绑定不跨重启保留，不重新应用等于没做）
+        if (args.Any(a => a.Equals("--resume", StringComparison.OrdinalIgnoreCase)))
+            MainForm.ResumeOnStart = true;
+
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
         {
             try

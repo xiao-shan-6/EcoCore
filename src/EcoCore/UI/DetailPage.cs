@@ -26,6 +26,7 @@ internal sealed class DetailPage : UserControl
 
     private readonly Dictionary<string, EcoToggle> _toggles = new();
     private readonly Dictionary<string, EcoSlider> _sliders = new();
+    private readonly Dictionary<string, Label> _tips = new();
     private bool _built;
 
     private int _cw = 800;
@@ -145,6 +146,9 @@ internal sealed class DetailPage : UserControl
             "插上适配器就切回你原来的 Windows 方案（并解除全部进程绑定），不再省电");
         AddToggle(card2, "chkBatt", "拔掉电源时自动应用当前方案", px, ref py2,
             "只用电池时自动套用这套设置，插回去再自动还原");
+        AddToggle(card2, "chkAuto", "开机自动启动（登录时静默提权，不弹 UAC）", px, ref py2,
+            "勾上后写一条 Windows 计划任务：登录即启动、直接拿管理员权限、缩到托盘，" +
+            "并把上次生效的方案重新应用一次（进程绑定不跨重启保留，不重放等于没开机自启）。");
         card2.Height = py2 + Px(12);
         y += card2.Height + Px(12);
 
@@ -192,6 +196,26 @@ internal sealed class DetailPage : UserControl
             StateStore.Save(_co.Settings);
         };
 
+        // 开机自启：真的去建/删计划任务，然后把「实际结果」回填到开关上（失败就弹回去）
+        _toggles["chkAuto"].CheckedChanged += (_, _) =>
+        {
+            bool want = _toggles["chkAuto"].Checked;
+            bool ok = want ? AutoStart.Enable(out string msg) : AutoStart.Disable(out msg);
+
+            var mode = AutoStart.Detect(out string state);
+            _co.Settings.StartWithWindows = ok && want && mode != AutoStartMode.None;
+            StateStore.Save(_co.Settings);
+
+            if (_toggles["chkAuto"].Checked != _co.Settings.StartWithWindows)
+                _toggles["chkAuto"].Checked = _co.Settings.StartWithWindows;
+
+            if (_tips.TryGetValue("chkAuto", out var tip))
+            {
+                tip.Text = msg;
+                tip.ForeColor = ok ? Theme.Green : Color.FromArgb(248, 113, 113);
+            }
+        };
+
         // 改任何参数 → 变成自定义（仅解锁状态下）
         foreach (var k in new[] { "chkPin", "chkEco", "chkPri", "chkSlider" })
             _toggles[k].CheckedChanged += (_, _) => MarkCustom();
@@ -234,6 +258,7 @@ internal sealed class DetailPage : UserControl
             BackColor = Color.Transparent
         };
         host.Controls.Add(tipLbl);
+        _tips[key] = tipLbl;
 
         y += Px(26) + tipLbl.Height + Px(6);
     }
@@ -290,6 +315,21 @@ internal sealed class DetailPage : UserControl
 
         _toggles["chkOnAc"].Checked = _co.Settings.AutoSwitchOnAc;
         _toggles["chkBatt"].Checked = _co.Settings.AutoSwitchOnBattery;
+
+        // 开机自启：以磁盘上的实际状态为准（可能在别的机器上被改过，也可能是手建的计划任务）
+        var autoMode = AutoStart.Detect(out string autoState);
+        _toggles["chkAuto"].Checked = autoMode != AutoStartMode.None;
+        _co.Settings.StartWithWindows = autoMode != AutoStartMode.None;
+        if (_tips.TryGetValue("chkAuto", out var autoTip))
+        {
+            autoTip.Text = autoState;
+            autoTip.ForeColor = autoMode switch
+            {
+                AutoStartMode.ScheduledTask => Theme.Green,
+                AutoStartMode.RunKey => Color.FromArgb(251, 191, 36),
+                _ => Theme.TextDim
+            };
+        }
 
         _sliders["sldMax"].Value = (int)Math.Clamp(_work.ThrottleMax, 0u, 100u);
         _sliders["sldMin"].Value = (int)Math.Clamp(_work.ThrottleMin, 0u, 100u);

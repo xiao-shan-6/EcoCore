@@ -33,6 +33,13 @@ public sealed class MainForm : Form
 
     /// <summary>调试/截图用：启动后立刻打开「精细调节」窗口。</summary>
     public static bool StartupOpenDetail;
+
+    /// <summary>开机自启拉起（--tray）：启动后直接缩到托盘，不弹窗口。</summary>
+    public static bool StartHiddenOnStart;
+
+    /// <summary>开机自启拉起（--resume）：启动后重新应用上次生效的方案。</summary>
+    public static bool ResumeOnStart;
+
     private bool _built;
 
     private int _cw = 840;          // 内容宽度（设备像素）
@@ -89,8 +96,23 @@ public sealed class MainForm : Form
             AppendLog("⚠ 未以管理员身份运行 —— 进程绑核 / 效率模式照常生效，但「频率上限 / 睿频 / EPP / 电源滑块」改不动。" +
                       "要全部功能请右键「以管理员身份运行」。");
 
-        if (_st.StartMinimized) BeginInvoke(HideToTray);
+        if (_st.StartMinimized || StartHiddenOnStart) BeginInvoke(HideToTray);
         if (StartupOpenDetail) BeginInvoke(OpenDetailWindow);
+
+        // 开机自启：把上次生效的方案重新应用一次。
+        // 进程的 E 核绑定 / EcoQoS 都不跨重启保留，不重放就等于开机自启没起作用。
+        if (ResumeOnStart)
+        {
+            if (_st.Applied)
+            {
+                AppendLog($"开机自启：重新应用上次的方案「{_working.Name}」…");
+                DoApply();
+            }
+            else
+            {
+                AppendLog("开机自启：上次退出时没有处于生效状态，本次不自动应用（可选方案后点「应用当前方案」）。");
+            }
+        }
     }
 
     protected override void OnSizeChanged(EventArgs e)
