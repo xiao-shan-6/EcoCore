@@ -623,15 +623,28 @@ public sealed class MainForm : Form
             return;
         }
 
-        // 退出时若还处于已应用状态，问一句要不要断开隔离
-        if (_co.IsApplied && e.CloseReason == CloseReason.UserClosing)
+        // 退出默认恢复系统电源设置（切回原方案 + 删副本 + 解除全部进程绑定）。
+        // 这是"默认"行为，理由：留在系统里的专用电源方案副本会让下一台/下一次运行莫名其妙地省电，
+        // 用户也搞不清是谁改的；退出还机器一个原样最省心。不想要可以在「精细调节」里关掉。
+        if (_co.IsApplied && _st.RestoreOnExit)
         {
-            var r = MessageBox.Show(this,
-                "退出后会解除全部进程的 E 核绑定。\n电源方案里写入的值会保留（可在「全部恢复默认」中清除）。\n\n退出前要顺便恢复电源方案吗？",
-                "节能核心", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (r == DialogResult.Cancel) { e.Cancel = true; return; }
-            if (r == DialogResult.Yes) _co.Restore(out _);
-            else _co.ReleaseAllProcesses();
+            _co.Restore(out string sum);
+            AppendLog($"退出（{e.CloseReason}）：已恢复系统电源设置 —— " + sum.Replace("\n", "；"));
+            _tray?.ShowBalloonTip(2000, "节能核心", "已恢复系统电源设置。", ToolTipIcon.Info);
+
+            // Restore 会清掉 Applied。但配了开机自启的话，"下次登录要重放方案"这个意图得留下，
+            // 否则退出一次自启就永久失效了。
+            if (AutoStart.Detect(out _) != AutoStartMode.None)
+            {
+                _st.Applied = true;
+                AppendLog("退出：开机自启仍启用，下次登录会重新应用方案。");
+            }
+        }
+        else if (_co.IsApplied)
+        {
+            // 用户关掉了「退出时恢复」：至少把进程层的 E 核绑定解开
+            _co.ReleaseAllProcesses();
+            AppendLog("退出：保留了电源方案（「退出时恢复」已关闭），已解除全部进程绑定。");
         }
 
         StateStore.Save(_st);

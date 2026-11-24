@@ -158,6 +158,9 @@ internal sealed class DetailPage : UserControl
             "插上适配器就切回你原来的 Windows 方案（并解除全部进程绑定），不再省电");
         AddToggle(card2, "chkBatt", "拔掉电源时自动应用当前方案", px, ref py2,
             "只用电池时自动套用这套设置，插回去再自动还原");
+        AddToggle(card2, "chkExit", "退出时恢复系统电源设置（默认开启）", px, ref py2,
+            "关掉程序（含关机 / 重启 / 注销）时自动切回原电源方案、删掉专用方案副本、解除全部进程绑定。" +
+            "关掉这一步，退出后机器会继续按本方案的频率上限运行，下次打开也看不出是谁改的。");
         AddToggle(card2, "chkAuto", "开机自动启动（登录时静默提权，不弹 UAC）", px, ref py2,
             "勾上后写一条 Windows 计划任务：登录即启动、直接拿管理员权限、缩到托盘，" +
             "并把上次生效的方案重新应用一次（进程绑定不跨重启保留，不重放等于没开机自启）。");
@@ -205,6 +208,11 @@ internal sealed class DetailPage : UserControl
         _toggles["chkBatt"].CheckedChanged += (_, _) =>
         {
             _co.Settings.AutoSwitchOnBattery = _toggles["chkBatt"].Checked;
+            StateStore.Save(_co.Settings);
+        };
+        _toggles["chkExit"].CheckedChanged += (_, _) =>
+        {
+            _co.Settings.RestoreOnExit = _toggles["chkExit"].Checked;
             StateStore.Save(_co.Settings);
         };
 
@@ -327,6 +335,7 @@ internal sealed class DetailPage : UserControl
 
         _toggles["chkOnAc"].Checked = _co.Settings.AutoSwitchOnAc;
         _toggles["chkBatt"].Checked = _co.Settings.AutoSwitchOnBattery;
+        _toggles["chkExit"].Checked = _co.Settings.RestoreOnExit;
 
         // 开机自启：以磁盘上的实际状态为准（可能在别的机器上被改过，也可能是手建的计划任务）
         var autoMode = AutoStart.Detect(out string autoState);

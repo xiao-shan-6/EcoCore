@@ -182,6 +182,8 @@ public sealed class AppSettings
     public bool StartWithWindows { get; set; } = false;
     public bool StartMinimized { get; set; } = false;
     public bool MinimizeToTrayOnClose { get; set; } = true;
+    /// <summary>退出程序时自动恢复系统电源设置（切回原方案、删掉副本、解除全部进程绑定）。默认开。</summary>
+    public bool RestoreOnExit { get; set; } = true;
     /// <summary>用户手动排除（永不处理）的进程名。</summary>
     public List<string> ExcludedProcesses { get; set; } = new();
     /// <summary>用户手动锁定到 E 核的进程名。</summary>
