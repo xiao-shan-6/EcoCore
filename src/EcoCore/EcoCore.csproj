@@ -12,7 +12,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>EcoCore</AssemblyName>
     <RootNamespace>EcoCore</RootNamespace>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Product>节能核心 EcoCore</Product>
     <Company>EcoCore</Company>
     <Description>英特尔大小核笔记本续航优化工具</Description>
@@ -24,6 +24,7 @@
   </PropertyGroup>
 
 </Project>
+
 
 
 

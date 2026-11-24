@@ -106,18 +106,19 @@ public sealed class MainForm : Form
         if (_st.StartMinimized || StartHiddenOnStart) BeginInvoke(HideToTray);
         if (StartupOpenDetail) BeginInvoke(OpenDetailWindow);
 
-        // 开机自启：把上次生效的方案重新应用一次。
+        // 开机自启：把上次用的方案（上次选中的就是 _working，已从 settings.json 恢复）重新应用一次。
         // 进程的 E 核绑定 / EcoQoS 都不跨重启保留，不重放就等于开机自启没起作用。
         if (ResumeOnStart)
         {
             if (_st.Applied)
             {
-                AppendLog($"开机自启：重新应用上次的方案「{_working.Name}」…");
+                AppendLog($"开机自启：按上次使用的方案「{_working.Name}」重新应用…");
                 DoApply();
             }
             else
             {
-                AppendLog("开机自启：上次退出时没有处于生效状态，本次不自动应用（可选方案后点「应用当前方案」）。");
+                AppendLog($"开机自启：上次退出时没有处于生效状态，本次不自动应用（当前方案仍是「{_working.Name}」，" +
+                          "点「应用当前方案」即可生效）。");
             }
         }
     }
@@ -534,6 +535,9 @@ public sealed class MainForm : Form
         _topo.IsEcoActive = p.PerfBoostMode == 0 || p.ThrottleMax < 100;
         _topo.ReservedCoreCount = p.ReservedPerformanceCores;
         _topo.Invalidate();
+
+        // 选方案即记住：下次打开界面、开机自启重放，都按这个方案来
+        StateStore.Save(_st);
     }
 
     /// <summary>主界面不再直接编辑参数：参数由「精细调节」窗口改，这里直接取当前工作副本。</summary>
@@ -552,6 +556,13 @@ public sealed class MainForm : Form
             else AppendLog("✗ " + summary);
         }
         finally { Cursor = Cursors.Default; }
+
+        // 记住"这次用的是哪个方案"：开机自启的 --resume 和下次打开界面都靠它恢复原样。
+        // 每次应用就落盘，而不是等退出时才写 —— 断电 / 强杀 / 关机流程没走完都不该丢。
+        _st.CurrentProfile = p.Clone();
+        _st.ActiveProfileName = p.Name;
+        if (p.IsCustom) _st.CustomProfile = p.Clone();
+        StateStore.Save(_st);
 
         _topo.IsEcoActive = p.ThrottleMax < 100 || p.PerfBoostMode == 0;
         _topo.Invalidate();
@@ -678,8 +689,8 @@ public sealed class MainForm : Form
             }
             else if (!_battery.OnAc && _st.AutoSwitchOnBattery)
             {
-                AppendLog("检测到断开电源 → 自动切换到「均衡」方案");
-                LoadProfileIntoUi(EcoProfile.Balanced());
+                // 用"当前选中的方案"，不是写死的「均衡」—— 用户在上次使用时选了哪个就套哪个
+                AppendLog($"检测到断开电源 → 自动应用当前方案「{_working.Name}」");
                 DoApply();
             }
         }
