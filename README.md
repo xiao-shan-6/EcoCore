@@ -239,6 +239,10 @@ private void OnDetailApplied(EcoProfile p)
 （`PowerDuplicateScheme` / `PowerWrite*` / `PowerSetActiveOverlayScheme`）要。
 非管理员启动时程序会明确提示「跳过电源策略层，进程层照常生效」，不是什么都不做。
 
+**权限状态一眼可见**：标题右端有权限胶囊 —— 绿色 `✓ 管理员` / 黄色 `⚠ 普通权限`，
+「精细调节」页面右上角同样标一个；启动日志里也会写明当前这一档能改什么。
+（实现：`MainForm.PaintHeader` 里的 `_isAdmin` 徽章 + `Coordinator.IsElevated()`）
+
 **插电 / 电池自动切换**：默认开启，两个独立开关（改了立刻存盘，不用点「应用」）：
 
 | 开关 | 触发 | 动作 |

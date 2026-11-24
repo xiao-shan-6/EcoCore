@@ -25,6 +25,9 @@ public sealed class MainForm : Form
     private bool _allowExit;
     private Panel? _footer;
 
+    /// <summary>本进程是否以管理员身份运行（只读，启动时判一次）。</summary>
+    private bool _isAdmin;
+
     /// <summary>当前选中的方案参数（主界面唯一的数据来源，精细调节改的就是它）。</summary>
     private EcoProfile _working = EcoProfile.Balanced();
 
@@ -92,9 +95,13 @@ public sealed class MainForm : Form
             AppendLog("⚠ 本机不是大小核混合架构（或没有检测到 E 核）—— 进程绑核不可用，" +
                       "只会应用电源方案层（频率上限 / 睿频 / EPP / 电源滑块）。");
         AppendLog($"当前电源方案：{_co.CurrentSchemeInfo()}");
-        if (!Coordinator.IsElevated())
-            AppendLog("⚠ 未以管理员身份运行 —— 进程绑核 / 效率模式照常生效，但「频率上限 / 睿频 / EPP / 电源滑块」改不动。" +
-                      "要全部功能请右键「以管理员身份运行」。");
+        _isAdmin = Coordinator.IsElevated();
+        // 仅用于截图/自检预览「管理员」样式，不影响任何真实行为
+        if (Environment.GetEnvironmentVariable("ECOCORE_FAKE_ADMIN") == "1") _isAdmin = true;
+        AppendLog(_isAdmin
+            ? "✓ 已以管理员身份运行 —— 进程层 + 电源层（频率上限 / 睿频 / EPP / 电源滑块）全部可用。"
+            : "⚠ 未以管理员身份运行 —— 进程绑核 / 效率模式照常生效，但「频率上限 / 睿频 / EPP / 电源滑块」改不动。" +
+              "要全部功能请右键「以管理员身份运行」。");
 
         if (_st.StartMinimized || StartHiddenOnStart) BeginInvoke(HideToTray);
         if (StartupOpenDetail) BeginInvoke(OpenDetailWindow);
@@ -477,14 +484,28 @@ public sealed class MainForm : Form
         TextRenderer.DrawText(g, txt, Theme.BodyFont, chip, col,
             TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
 
-        // 已应用标记
+        // 右侧状态徽章：从电池胶囊往左依次排「已生效」「管理员/普通权限」
+        int cursor = _header.Width - w - Px(10);
+
         if (_co.IsApplied)
         {
-            var badge = new Rectangle(_header.Width - w - Px(92), Px(24), Px(82), Px(24));
+            var badge = new Rectangle(cursor - Px(82), Px(24), Px(82), Px(24));
             Theme.FillRound(g, badge, badge.Height / 2, Color.FromArgb(22, 55, 44));
             TextRenderer.DrawText(g, "已生效", Theme.SmallFont, badge, Theme.Green,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+            cursor -= Px(82) + Px(8);
         }
+
+        // 权限胶囊：电源层只有提权才改得动，状态必须一眼看见
+        string at = _isAdmin ? "✓ 管理员" : "普通权限";
+        Color ac = _isAdmin ? Theme.Green : Color.FromArgb(251, 191, 36);
+        Color abg = _isAdmin ? Color.FromArgb(22, 55, 44) : Color.FromArgb(48, 40, 20);
+        int aw = TextRenderer.MeasureText(at, Theme.SmallFont).Width + Px(22);
+        var abadge = new Rectangle(cursor - aw, Px(26), aw, Px(22));
+        Theme.FillRound(g, abadge, abadge.Height / 2, abg);
+        Theme.StrokeRound(g, abadge, abadge.Height / 2, Color.FromArgb(70, ac));
+        TextRenderer.DrawText(g, at, Theme.SmallFont, abadge, ac,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
     }
 
     // ───────────────────────── 方案 → 界面 ─────────────────────────

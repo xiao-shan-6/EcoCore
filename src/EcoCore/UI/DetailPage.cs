@@ -20,6 +20,7 @@ internal sealed class DetailPage : UserControl
     private Panel _footer = null!;
     private Label _title = null!;
     private Label _hint = null!;
+    private Label _perm = null!;
     private EcoButton _btnCustom = null!;
     private EcoButton _btnApply = null!;
     private EcoButton _btnBack = null!;
@@ -105,7 +106,7 @@ internal sealed class DetailPage : UserControl
         _hint = new Label
         {
             Location = new Point(M, y),
-            Size = new Size(_cw, Px(24)),
+            Size = new Size(_cw - Px(150), Px(24)),
             ForeColor = Theme.TextDim,
             Font = Theme.SmallFont,
             AutoSize = false,
@@ -113,6 +114,17 @@ internal sealed class DetailPage : UserControl
         };
         _root.Controls.Add(_hint);
         y += Px(24) + Px(12);
+
+        // 权限胶囊：标题行右端，短文本不会像长句那样被裁
+        _perm = new Label
+        {
+            Location = new Point(M + _cw - Px(146), y - Px(24) - Px(12) + Px(2)),
+            Size = new Size(Px(146), Px(22)),
+            Font = Theme.SmallFont,
+            TextAlign = ContentAlignment.MiddleRight,
+            AutoSize = false
+        };
+        _root.Controls.Add(_perm);
 
         // ── 参数卡片 ──
         var card = MakeCard(_root, new Point(M, y), new Size(_cw, Px(300)));
@@ -360,6 +372,12 @@ internal sealed class DetailPage : UserControl
         _hint.Text = _editable
             ? "这个方案可以随便调：改完整点「应用并生效」，参数会自动存进「自定义」。"
             : "这个方案的数值是调过的成套参数，已锁定。想自己调请点下面的「切到「自定义」」。";
+
+        // 权限状态：这里的滑块有一半属于电源层，普通权限下改了也不会生效
+        bool admin = Coordinator.IsElevated();
+        _perm.Text = admin ? "✓ 管理员权限" : "⚠ 普通权限";
+        _perm.ForeColor = admin ? Theme.Green : Color.FromArgb(251, 191, 36);
+        _perm.Visible = true;
     }
 
     /// <summary>只在解锁状态被调用：用户动了参数就把方案标成自定义，免得存回预设里。</summary>
