@@ -203,7 +203,7 @@ internal static class Program
             return 0;
         }
 
-        ApplicationConfiguration.Initialize();
+        UiBoot.Initialize();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.Run(new MainForm());
         return 0;
@@ -244,7 +244,7 @@ internal static class SelfTest
         Stage("smoke enter");
         try
         {
-            ApplicationConfiguration.Initialize();
+            UiBoot.Initialize();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Stage("smoke new MainForm");
             using var f = new MainForm();
@@ -281,7 +281,7 @@ internal static class SelfTest
     {
         try
         {
-            ApplicationConfiguration.Initialize();
+            UiBoot.Initialize();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             using var f = new MainForm();
             f.StartPosition = FormStartPosition.Manual;
@@ -310,7 +310,7 @@ internal static class SelfTest
     {
         try
         {
-            ApplicationConfiguration.Initialize();
+            UiBoot.Initialize();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             if (Environment.GetCommandLineArgs().Any(a => a.Equals("--custom", StringComparison.OrdinalIgnoreCase)))
                 MainForm.StartupProfileOverride = EcoProfile.Custom();
@@ -344,7 +344,7 @@ internal static class SelfTest
     {
         try
         {
-            ApplicationConfiguration.Initialize();
+            UiBoot.Initialize();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             var co = new Coordinator();
             using var f = new ProcessForm(co);

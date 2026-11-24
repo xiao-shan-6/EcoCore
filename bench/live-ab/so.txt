@@ -1,0 +1,145 @@
+=== EcoCore 功耗对比测试 ===
+CPU        : Intel(R) Core(TM) Ultra 9 290HX Plus
+拓扑       : 8 个 P 核 + 16 个 E 核
+权限       : 非管理员（只跑进程层，电源层跳过）
+电池       : 放电功率 13477 mW，剩余 65%
+屏幕亮度   : 51%
+输出目录   : C:\deepseek\笔记本电源优化\bench\live-ab
+
+── 阶段 base1：第 1 轮 原样（不用 EcoCore） ──
+  ✓ 电源方案恢复为系统原有方案 64a64f24-65b9-4b56-befd-5ec1eaced9b3
+删除专用方案 EcoCore 节能
+  稳定 10s（等调度器/频率收敛）…
+  base1: 2/45s  平均 12375 mW  CPU 11%     base1: 4/45s  平均 12383 mW  CPU 6%     base1: 6/45s  平均 12423 mW  CPU 5%     base1: 8/45s  平均 12435 mW  CPU 4%     base1: 10/45s  平均 12442 mW  CPU 5%     base1: 12/45s  平均 12402 mW  CPU 5%     base1: 14/45s  平均 12375 mW  CPU 5%     base1: 16/45s  平均 12345 mW  CPU 5%     base1: 18/45s  平均 12297 mW  CPU 5%     base1: 20/45s  平均 12278 mW  CPU 5%     base1: 22/45s  平均 12269 mW  CPU 5%     base1: 24/45s  平均 12265 mW  CPU 5%     base1: 26/45s  平均 12270 mW  CPU 5%     base1: 28/45s  平均 12261 mW  CPU 5%     base1: 30/45s  平均 12257 mW  CPU 11%     base1: 32/45s  平均 12259 mW  CPU 6%     base1: 34/45s  平均 12264 mW  CPU 5%     base1: 36/45s  平均 12274 mW  CPU 6%     base1: 38/45s  平均 12268 mW  CPU 5%     base1: 40/45s  平均 12254 mW  CPU 4%     base1: 42/45s  平均 12233 mW  CPU 5%     base1: 44/45s  平均 12203 mW  CPU 5%   
+
+── 阶段 test1-极致省电：第 1 轮 EcoCore「极致省电」 ──
+  ✓ ⚠ 非管理员运行：跳过电源策略层（频率上限 / 睿频 / EPP 不生效），进程层照常生效
+保留大核 CPU Set = [256]
+系统关键进程钉到保留大核：0 个（DWM / 音频）
+后台进程：CPU Set 绑定 87 个，效率模式 87 个
+  稳定 10s（等调度器/频率收敛）…
+  test1-极致省电: 2/45s  平均 11561 mW  CPU 5%     test1-极致省电: 4/45s  平均 11665 mW  CPU 9%     test1-极致省电: 6/45s  平均 11785 mW  CPU 6%     test1-极致省电: 8/45s  平均 11804 mW  CPU 5%     test1-极致省电: 10/45s  平均 11839 mW  CPU 6%     test1-极致省电: 12/45s  平均 11859 mW  CPU 4%     test1-极致省电: 14/45s  平均 11848 mW  CPU 5%     test1-极致省电: 16/45s  平均 11834 mW  CPU 5%     test1-极致省电: 18/45s  平均 11815 mW  CPU 5%     test1-极致省电: 20/45s  平均 11815 mW  CPU 5%     test1-极致省电: 22/45s  平均 11824 mW  CPU 5%     test1-极致省电: 24/45s  平均 11835 mW  CPU 5%     test1-极致省电: 26/45s  平均 11853 mW  CPU 6%     test1-极致省电: 28/45s  平均 11850 mW  CPU 5%     test1-极致省电: 30/45s  平均 11840 mW  CPU 5%     test1-极致省电: 32/45s  平均 11834 mW  CPU 5%     test1-极致省电: 34/45s  平均 11841 mW  CPU 10%     test1-极致省电: 36/45s  平均 11875 mW  CPU 7%     test1-极致省电: 38/45s  平均 11908 mW  CPU 4%     test1-极致省电: 40/45s  平均 11935 mW  CPU 6%     test1-极致省电: 42/45s  平均 11944 mW  CPU 4%     test1-极致省电: 44/45s  平均 11937 mW  CPU 4%   
+
+── 阶段 base2：第 2 轮 原样（不用 EcoCore） ──
+  ✓ 解除 devenv(9724) 的 E 核绑定
+解除 chrome(10476) 的 E 核绑定
+解除 node(17780) 的 E 核绑定
+解除 DeepSeek Harness(8556) 的 E 核绑定
+解除 wallpaper64(23828) 的 E 核绑定
+解除 DeepSeek Harness(23676) 的 E 核绑定
+解除 chrome(6060) 的 E 核绑定
+解除 DeepSeek Harness(21256) 的 E 核绑定
+解除 NVIDIA Overlay(16228) 的 E 核绑定
+解除 DevHub(19996) 的 E 核绑定
+解除 ServiceHub.IntellicodeModelService(14308) 的 E 核绑定
+解除 SakuraCat(20884) 的 E 核绑定
+解除 chrome(10296) 的 E 核绑定
+解除 chrome(20072) 的 E 核绑定
+解除 chrome(12104) 的 E 核绑定
+解除 SakuraCat(19100) 的 E 核绑定
+解除 SakuraCat(7084) 的 E 核绑定
+解除 ShellHost(3700) 的 E 核绑定
+解除 NVIDIA Overlay(17712) 的 E 核绑定
+解除 DeepSeek Harness(18876) 的 E 核绑定
+解除 CHXSmartScreen(13652) 的 E 核绑定
+解除 msedgewebview2(21492) 的 E 核绑定
+解除 SakuraCat(16532) 的 E 核绑定
+解除 CrossDeviceService(16600) 的 E 核绑定
+解除 msedgewebview2(22336) 的 E 核绑定
+解除 PerfWatson2(21900) 的 E 核绑定
+解除 msedgewebview2(22008) 的 E 核绑定
+解除 NVIDIA Overlay(18016) 的 E 核绑定
+解除 DeepSeek Harness(25036) 的 E 核绑定
+解除 chrome(3372) 的 E 核绑定
+解除 msedgewebview2(2056) 的 E 核绑定
+解除 pwsh(25536) 的 E 核绑定
+解除 msedgewebview2(15080) 的 E 核绑定
+解除 chrome(8832) 的 E 核绑定
+解除 nvcontainer(10992) 的 E 核绑定
+解除 chrome(21808) 的 E 核绑定
+解除 CrossDeviceResume(15580) 的 E 核绑定
+解除 chrome(24640) 的 E 核绑定
+解除 AsusSurvey(15568) 的 E 核绑定
+解除 ApplicationFrameHost(8988) 的 E 核绑定
+解除 DeepSeek Harness(14876) 的 E 核绑定
+解除 msedgewebview2(13672) 的 E 核绑定
+解除 chrome(25144) 的 E 核绑定
+解除 AppActions(21568) 的 E 核绑定
+解除 Widgets(18184) 的 E 核绑定
+解除 com.vortex.helper(20448) 的 E 核绑定
+解除 SakuraCat(7896) 的 E 核绑定
+解除 msedgewebview2(21968) 的 E 核绑定
+解除 NVIDIA Overlay(17756) 的 E 核绑定
+解除 nvcontainer(5800) 的 E 核绑定
+解除 chrome(9824) 的 E 核绑定
+解除 NVIDIA Overlay(17860) 的 E 核绑定
+解除 WidgetService(22980) 的 E 核绑定
+解除 chrome(18956) 的 E 核绑定
+解除 vcpkgsrv(17440) 的 E 核绑定
+解除 AsusOptimizationStartupTask(12696) 的 E 核绑定
+解除 chrome(20728) 的 E 核绑定
+解除 msedgewebview2(22120) 的 E 核绑定
+解除 nvcontainer(11648) 的 E 核绑定
+解除 vcpkgsrv(9652) 的 E 核绑定
+解除 vcpkgsrv(7036) 的 E 核绑定
+解除 vcpkgsrv(12464) 的 E 核绑定
+解除 vcpkgsrv(15296) 的 E 核绑定
+解除 YunDetectService(23736) 的 E 核绑定
+解除 msedgewebview2(1144) 的 E 核绑定
+解除 ACE-Tray(9272) 的 E 核绑定
+解除 chrome(3572) 的 E 核绑定
+解除 AsusOSD(24516) 的 E 核绑定
+解除 rundll32(12304) 的 E 核绑定
+解除 GearLink_PowerNotification(14228) 的 E 核绑定
+解除 GearLink_KBService(13124) 的 E 核绑定
+解除 SecurityHealthSystray(9036) 的 E 核绑定
+解除 msedgewebview2(20912) 的 E 核绑定
+解除 msedgewebview2(12072) 的 E 核绑定
+解除 ipf_helper(12688) 的 E 核绑定
+解除 UserOOBEBroker(9952) 的 E 核绑定
+解除 chrome(21572) 的 E 核绑定
+解除 conhost(25500) 的 E 核绑定
+解除 RtkAudUService64(3704) 的 E 核绑定
+解除 ArmouryCrate(19532) 的 E 核绑定
+解除 conhost(15920) 的 E 核绑定
+解除 msedgewebview2(14756) 的 E 核绑定
+解除 HipsTray(20772) 的 E 核绑定
+解除 GearLink_MacroServer(12376) 的 E 核绑定
+解除 GearLink_UtilityCompanion(14212) 的 E 核绑定
+解除 vshost(13472) 的 E 核绑定
+解除 asus_framework(21416) 的 E 核绑定
+电源方案恢复为系统原有方案 64a64f24-65b9-4b56-befd-5ec1eaced9b3
+  稳定 10s（等调度器/频率收敛）…
+  base2: 2/45s  平均 11561 mW  CPU 6%     base2: 4/45s  平均 11649 mW  CPU 7%     base2: 6/45s  平均 11758 mW  CPU 5%     base2: 8/45s  平均 11888 mW  CPU 10%     base2: 10/45s  平均 11989 mW  CPU 5%     base2: 12/45s  平均 12069 mW  CPU 5%     base2: 14/45s  平均 12131 mW  CPU 4%     base2: 16/45s  平均 12182 mW  CPU 5%     base2: 18/45s  平均 12152 mW  CPU 4%     base2: 20/45s  平均 12133 mW  CPU 6%     base2: 22/45s  平均 12127 mW  CPU 5%     base2: 24/45s  平均 12113 mW  CPU 6%     base2: 26/45s  平均 12114 mW  CPU 4%     base2: 28/45s  平均 12107 mW  CPU 5%     base2: 30/45s  平均 12108 mW  CPU 5%     base2: 32/45s  平均 12104 mW  CPU 5%     base2: 34/45s  平均 12104 mW  CPU 4%     base2: 36/45s  平均 12112 mW  CPU 9%     base2: 38/45s  平均 12125 mW  CPU 6%     base2: 40/45s  平均 12132 mW  CPU 4%     base2: 42/45s  平均 12137 mW  CPU 5%     base2: 44/45s  平均 12127 mW  CPU 5%   
+
+── 阶段 test2-极致省电：第 2 轮 EcoCore「极致省电」 ──
+  ✓ ⚠ 非管理员运行：跳过电源策略层（频率上限 / 睿频 / EPP 不生效），进程层照常生效
+保留大核 CPU Set = [256]
+系统关键进程钉到保留大核：0 个（DWM / 音频）
+后台进程：CPU Set 绑定 87 个，效率模式 87 个
+  稳定 10s（等调度器/频率收敛）…
+  test2-极致省电: 2/45s  平均 8974 mW  CPU 2%     test2-极致省电: 4/45s  平均 8583 mW  CPU 4%     test2-极致省电: 6/45s  平均 8442 mW  CPU 2%     test2-极致省电: 8/45s  平均 8348 mW  CPU 2%     test2-极致省电: 10/45s  平均 8297 mW  CPU 5%     test2-极致省电: 12/45s  平均 8304 mW  CPU 3%     test2-极致省电: 14/45s  平均 8292 mW  CPU 1%     test2-极致省电: 16/45s  平均 8322 mW  CPU 1%     test2-极致省电: 18/45s  平均 8335 mW  CPU 1%     test2-极致省电: 20/45s  平均 8316 mW  CPU 3%     test2-极致省电: 22/45s  平均 8266 mW  CPU 1%     test2-极致省电: 24/45s  平均 8214 mW  CPU 2%     test2-极致省电: 26/45s  平均 8177 mW  CPU 1%     test2-极致省电: 28/45s  平均 8123 mW  CPU 2%     test2-极致省电: 30/45s  平均 8081 mW  CPU 1%     test2-极致省电: 32/45s  平均 8045 mW  CPU 2%     test2-极致省电: 34/45s  平均 8005 mW  CPU 1%     test2-极致省电: 36/45s  平均 8014 mW  CPU 3%     test2-极致省电: 38/45s  平均 8050 mW  CPU 6%     test2-极致省电: 40/45s  平均 8165 mW  CPU 4%     test2-极致省电: 42/45s  平均 8297 mW  CPU 3%     test2-极致省电: 44/45s  平均 8429 mW  CPU 3%   
+
+=== EcoCore 功耗对比汇总 ===
+机型/CPU : Intel(R) Core(TM) Ultra 9 290HX Plus（8P + 16E）
+权限     : 非管理员（电源层未生效）
+屏幕亮度 : 51%（测试期间保持不变）
+采样     : 每阶段稳定 10s 后连续采 45s，2s 一个点
+
+阶段            平均功耗      最低      最高   样本  平均CPU  亮度  电量变化
+base1            12203 mW    11577    12503    22     5.6%   51%  65% → 65%
+test1-极致省电       11937 mW    11561    12503    22     5.6%   51%  65% → 65%
+base2            12127 mW    11561    12535    22     5.5%   51%  64% → 64%
+test2-极致省电        8429 mW     7361    11194    22     2.5%   51%  64% → 64%
+
+=== 配对对比：原样 → EcoCore「极致省电」（每回合交替，抵消漂移）===
+回合   原样          EcoCore       差值       百分比
+1          12203 mW      11937 mW      -266 mW      -2.2%
+2          12127 mW       8429 mW     -3698 mW     -30.5%
+
+平均：原样 12165 mW → 「极致省电」10183 mW，变化 -16.3%（-1982 mW）
+续航估算（82 Wh 电池）：原样 6.74 小时 → 8.05 小时
+
+
+文件：C:\deepseek\笔记本电源优化\bench\live-ab
+耗时：3.8 分钟

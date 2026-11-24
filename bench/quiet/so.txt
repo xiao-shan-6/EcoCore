@@ -1,0 +1,41 @@
+=== EcoCore 功耗对比测试 ===
+CPU        : Intel(R) Core(TM) Ultra 9 290HX Plus
+拓扑       : 8 个 P 核 + 16 个 E 核
+权限       : 非管理员（只跑进程层，电源层跳过）
+电池       : 放电功率 26971 mW，剩余 57%
+屏幕亮度   : 51%
+输出目录   : C:\deepseek\笔记本电源优化\bench\quiet
+
+── 阶段 base1：第 1 轮 原样（不用 EcoCore） ──
+  ✓ 没有任何需要恢复的改动。
+  稳定 10s（等调度器/频率收敛）…
+  base1: 2/40s  平均 13956 mW  CPU 8%     base1: 4/40s  平均 13988 mW  CPU 7%     base1: 6/40s  平均 13967 mW  CPU 6%     base1: 8/40s  平均 14048 mW  CPU 9%     base1: 10/40s  平均 14097 mW  CPU 7%     base1: 12/40s  平均 14111 mW  CPU 11%     base1: 14/40s  平均 14312 mW  CPU 14%     base1: 16/40s  平均 14457 mW  CPU 9%     base1: 18/40s  平均 14623 mW  CPU 9%     base1: 20/40s  平均 14830 mW  CPU 9%     base1: 22/40s  平均 14959 mW  CPU 8%     base1: 24/40s  平均 15073 mW  CPU 11%     base1: 26/40s  平均 15141 mW  CPU 6%     base1: 28/40s  平均 15172 mW  CPU 8%     base1: 30/40s  平均 15182 mW  CPU 8%     base1: 32/40s  平均 15168 mW  CPU 8%     base1: 34/40s  平均 15169 mW  CPU 8%     base1: 36/40s  平均 15174 mW  CPU 9%     base1: 38/40s  平均 15177 mW  CPU 7%   
+
+── 阶段 test1-极致省电：第 1 轮 EcoCore「极致省电」 ──
+  ✓ ⚠ 非管理员运行：跳过电源策略层（频率上限 / 睿频 / EPP 不生效），进程层照常生效
+保留大核 CPU Set = [256]
+系统关键进程钉到保留大核：0 个（DWM / 音频）
+后台进程：CPU Set 绑定 91 个，效率模式 91 个
+  稳定 10s（等调度器/频率收敛）…
+  test1-极致省电: 2/40s  平均 15394 mW  CPU 7%     test1-极致省电: 4/40s  平均 15106 mW  CPU 7%     test1-极致省电: 6/40s  平均 14973 mW  CPU 9%     test1-极致省电: 8/40s  平均 14887 mW  CPU 7%     test1-极致省电: 10/40s  平均 14841 mW  CPU 8%     test1-极致省电: 12/40s  平均 14790 mW  CPU 7%     test1-极致省电: 14/40s  平均 14725 mW  CPU 7%     test1-极致省电: 16/40s  平均 14703 mW  CPU 9%     test1-极致省电: 18/40s  平均 14689 mW  CPU 8%     test1-极致省电: 20/40s  平均 14691 mW  CPU 8%     test1-极致省电: 22/40s  平均 14719 mW  CPU 12%     test1-极致省电: 24/40s  平均 14752 mW  CPU 9%     test1-极致省电: 26/40s  平均 14763 mW  CPU 7%     test1-极致省电: 28/40s  平均 14774 mW  CPU 8%     test1-极致省电: 30/40s  平均 14755 mW  CPU 8%     test1-极致省电: 32/40s  平均 14728 mW  CPU 7%     test1-极致省电: 34/40s  平均 14683 mW  CPU 7%     test1-极致省电: 36/40s  平均 14643 mW  CPU 7%     test1-极致省电: 38/40s  平均 14620 mW  CPU 9%   
+
+=== EcoCore 功耗对比汇总 ===
+机型/CPU : Intel(R) Core(TM) Ultra 9 290HX Plus（8P + 16E）
+权限     : 非管理员（电源层未生效）
+屏幕亮度 : 51%（测试期间保持不变）
+采样     : 每阶段稳定 10s 后连续采 40s，2s 一个点
+
+阶段            平均功耗      最低      最高   样本  平均CPU  亮度  电量变化
+base1            15177 mW    13924    16687    19     8.5%   51%  57% → 57%
+test1-极致省电       14620 mW    13956    15394    19     7.8%   51%  57% → 57%
+
+=== 配对对比：原样 → EcoCore「极致省电」（每回合交替，抵消漂移）===
+回合   原样          EcoCore       差值       百分比
+1          15177 mW      14620 mW      -557 mW      -3.7%
+
+平均：原样 15177 mW → 「极致省电」14620 mW，变化 -3.7%（-557 mW）
+续航估算（82 Wh 电池）：原样 5.40 小时 → 5.61 小时
+
+
+文件：C:\deepseek\笔记本电源优化\bench\quiet
+耗时：1.7 分钟
