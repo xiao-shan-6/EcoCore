@@ -161,11 +161,16 @@ internal static class Program
                 case "disable":
                     Console.WriteLine(AutoStart.Disable(out string dis) ? "[OK] " + dis : "[FAIL] " + dis);
                     break;
+                case "test":
+                    Console.WriteLine(AutoStart.RunNow(out string rn) ? "[OK] " + rn : "[FAIL] " + rn);
+                    break;
                 default:
                     var mode = AutoStart.Detect(out string det);
                     Console.WriteLine($"模式: {mode}");
                     Console.WriteLine($"状态: {det}");
                     Console.WriteLine($"命令: {AutoStart.CommandLine}");
+                    Console.WriteLine("--- 计划任务体检 ---");
+                    Console.WriteLine(AutoStart.Health());
                     break;
             }
             return 0;

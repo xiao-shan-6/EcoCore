@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Security.Principal;
+using System.Text;
 using Microsoft.Win32;
 
 namespace EcoCore.Core;
@@ -70,9 +72,16 @@ internal static class AutoStart
     {
         if (TaskExists(out string taskCmd))
         {
-            detail = "已启用（计划任务 · 登录时以管理员身份启动，不弹 UAC）";
+            var xml = TaskXml();
+            bool bad = XmlBool(xml, "DisallowStartIfOnBatteries") || XmlBool(xml, "StopIfGoingOnBatteries");
+            bool highest = XmlText(xml, "RunLevel").Contains("Highest", StringComparison.OrdinalIgnoreCase);
+
+            detail = highest
+                ? "已启用（计划任务 · 登录时以管理员身份启动，不弹 UAC · 电池供电也启动）"
+                : "已启用（计划任务 · 普通权限启动，电源层改不动）";
+            if (bad) detail += "　⚠ 这条任务带着「电池时不启动」，拔电开机不会启动 —— 关掉再打开开关即可重建";
             if (!string.IsNullOrEmpty(taskCmd) && !taskCmd.Contains(Identity, StringComparison.OrdinalIgnoreCase))
-                detail += $"  ⚠ 任务指向的是另一个路径：{taskCmd}";
+                detail += $"　⚠ 任务指向的是另一个路径：{taskCmd}";
             return AutoStartMode.ScheduledTask;
         }
 
@@ -94,52 +103,129 @@ internal static class AutoStart
     /// <summary>打开自启动。优先建计划任务；没权限时退回注册表。</summary>
     public static bool Enable(out string detail)
     {
-        // 1) 计划任务（需要管理员）
         if (TaskExists(out _)) DeleteTask(out _);
 
-        var args = new[]
+        if (RegisterTask(out string regMsg))
         {
-            "/create", "/f",
-            "/tn", TaskName,
-            "/tr", CommandLine,
-            "/sc", "onlogon",
-            "/rl", "highest"
-        };
-        var r = Run("schtasks", args);
-        if (r.Exit != 0)
+            DeleteRunValue();   // 计划任务优先，清掉可能残留的 Run 项，避免开机启动两次
+            detail = IsRunLevelHighest()
+                ? $"已启用（计划任务「{TaskName}」· 登录时以管理员身份启动，不弹 UAC · 电池供电同样启动）"
+                : $"已启用（计划任务「{TaskName}」· 普通权限，电池供电同样启动；" +
+                  "但电源层改不动 —— 想静默提权请以管理员身份重新打开本程序再勾一次）";
+            return true;
+        }
+
+        // 退路：注册表 Run 项
+        if (WriteRunValue(CommandLine))
         {
-            // 有些系统不接受 onlogon + highest 的组合，再试一次不带 /rl
-            var r2 = Run("schtasks", new[]
+            detail = "已启用（注册表 Run 项）。注意：计划任务建不上（多半是没有管理员权限），只能走注册表 —— " +
+                     "登录后电源层不会生效，请以管理员身份重新打开本程序再勾一次。";
+            return true;
+        }
+
+        detail = "启用失败：" + regMsg;
+        return false;
+    }
+
+    /// <summary>
+    /// 用 XML 注册计划任务。
+    /// </summary>
+    /// <remarks>
+    /// **为什么不能用 <c>schtasks /create /sc onlogon</c> 的默认模板**：
+    /// 它生成的任务里 <c>DisallowStartIfOnBatteries=true</c>、<c>StopIfGoingOnBatteries=true</c>，
+    /// 也就是「只有接着电源才启动」「切到电池就停掉」。对一台笔记本来说，拔了电源开机
+    /// 这条任务根本不会跑 —— 表现就是「设置好了开机自启，但开机没有任何反应」。
+    /// 实测：任务存在、状态 Ready、`Last Result = 267011`（SCHED_S_TASK_HAS_NOT_RUN），
+    /// 电池供电的这次登录被直接跳过。所以必须自己写 XML 把这两个开关关掉。
+    /// </remarks>
+    private static bool RegisterTask(out string msg)
+    {
+        var levels = IsElevated()
+            ? new[] { "HighestAvailable", "LeastPrivilege" }
+            : new[] { "LeastPrivilege" };
+
+        var errs = new List<string>();
+        foreach (var level in levels)
+        {
+            string path = Path.Combine(Path.GetTempPath(),
+                "EcoCore-autostart-" + Guid.NewGuid().ToString("N")[..8] + ".xml");
+            try
             {
-                "/create", "/f",
-                "/tn", TaskName,
-                "/tr", CommandLine,
-                "/sc", "onlogon"
-            });
-            if (r2.Exit != 0)
-            {
-                // 2) 退回注册表 Run 项
-                bool ok = WriteRunValue(CommandLine);
-                detail = ok
-                    ? "已启用（注册表 Run 项）。注意：改计划任务需要管理员权限，当前是普通权限，" +
-                      "所以只能走注册表 —— **登录后电源层不会生效**，请以管理员身份重新打开本程序再勾一次。"
-                    : $"启用失败：{Trim(r2.Out + r2.Err)}";
-                return ok;
+                // XML 声明是 UTF-16，schtasks 会按声明解析，写 UTF-8 会报「XML 格式不正确」
+                File.WriteAllText(path, BuildTaskXml(level), Encoding.Unicode);
             }
+            catch (Exception ex)
+            {
+                errs.Add($"[{level}] 写临时文件失败：{ex.Message}");
+                continue;
+            }
+
+            var r = Run("schtasks", new[] { "/create", "/tn", TaskName, "/xml", path, "/f" });
+            try { File.Delete(path); } catch { /* 删不掉就留着，临时目录无所谓 */ }
+
+            if (r.Exit == 0 && TaskExists(out _)) { msg = $"已注册（RunLevel={level}）"; return true; }
+            errs.Add($"[{level}] {Trim(r.Out + r.Err)}");
         }
 
-        // 建完再确认一遍，别报成功其实没建上
-        if (!TaskExists(out string cmd))
-        {
-            detail = $"计划任务创建后查不到：{Trim(r.Out + r.Err)}";
-            return false;
-        }
+        msg = string.Join("；", errs);
+        return false;
+    }
 
-        // 计划任务优先，顺手把可能残留的 Run 项清掉，避免开机启动两次
-        DeleteRunValue();
-        detail = $"已启用（计划任务「{TaskName}」· 登录时以管理员身份启动，不弹 UAC）" +
-                 (cmd.Contains(Identity, StringComparison.OrdinalIgnoreCase) ? "" : $"  ⚠ 实际命令：{cmd}");
-        return true;
+    /// <summary>生成计划任务 XML（登录触发、电池也启动、无执行时限、多实例忽略新的）。</summary>
+    private static string BuildTaskXml(string runLevel)
+    {
+        string sid = WindowsIdentity.GetCurrent().User?.Value ?? "";
+        var (command, _) = Invocation();
+        string desc = "EcoCore 开机自启：登录后在托盘静默启动，并按上次使用的方案重新应用节能设置。";
+
+        return $"""
+<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>{desc}</Description>
+    <Author>{Environment.UserDomainName}\{Environment.UserName}</Author>
+  </RegistrationInfo>
+  <Triggers>
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+      <UserId>{sid}</UserId>
+      <Delay>PT10S</Delay>
+    </LogonTrigger>
+  </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <UserId>{sid}</UserId>
+      <LogonType>InteractiveToken</LogonType>
+      <RunLevel>{runLevel}</RunLevel>
+    </Principal>
+  </Principals>
+  <Settings>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <AllowHardTerminate>true</AllowHardTerminate>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+    <IdleSettings>
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <AllowStartOnDemand>true</AllowStartOnDemand>
+    <Enabled>true</Enabled>
+    <Hidden>false</Hidden>
+    <RunOnlyIfIdle>false</RunOnlyIfIdle>
+    <WakeToRun>false</WakeToRun>
+    <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+    <Priority>7</Priority>
+  </Settings>
+  <Actions Context="Author">
+    <Exec>
+      <Command>{command.Replace("\"", "")}</Command>
+      <Arguments>--tray --resume</Arguments>
+    </Exec>
+  </Actions>
+</Task>
+""";
     }
 
     /// <summary>关掉自启动（计划任务和注册表两处都清）。</summary>
@@ -194,6 +280,108 @@ internal static class AutoStart
         var r = Run("schtasks", new[] { "/delete", "/tn", TaskName, "/f" });
         message = Trim(r.Out + r.Err);
         return r.Exit == 0;
+    }
+
+    /// <summary>已有计划任务的 XML（没有任务返回空串）。</summary>
+    private static string TaskXml()
+    {
+        var r = Run("schtasks", new[] { "/query", "/tn", TaskName, "/xml" });
+        return r.Exit == 0 ? r.Out : "";
+    }
+
+    private static bool XmlBool(string xml, string tag)
+    {
+        var m = System.Text.RegularExpressions.Regex.Match(xml, $"<{tag}>([^<]+)</{tag}>");
+        return m.Success && m.Groups[1].Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string XmlText(string xml, string tag)
+    {
+        var m = System.Text.RegularExpressions.Regex.Match(xml, $"<{tag}>([^<]+)</{tag}>");
+        return m.Success ? m.Groups[1].Value.Trim() : "";
+    }
+
+    /// <summary>任务是不是以最高权限运行（决定电源层能不能生效）。</summary>
+    private static bool IsRunLevelHighest() =>
+        XmlText(TaskXml(), "RunLevel").Contains("Highest", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsElevated()
+    {
+        try
+        {
+            using var id = WindowsIdentity.GetCurrent();
+            return new WindowsPrincipal(id).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+        catch { return false; }
+    }
+
+    /// <summary>
+    /// 启动时自检：老版本建的任务带着「电池时不启动」，在管理员环境下顺手按新模板重建。
+    /// </summary>
+    /// <returns>真的重建了返回 true，message 说明结果。</returns>
+    public static bool RepairIfNeeded(out string message)
+    {
+        message = "";
+        if (!TaskExists(out _)) return false;
+
+        var xml = TaskXml();
+        bool bad = XmlBool(xml, "DisallowStartIfOnBatteries") || XmlBool(xml, "StopIfGoingOnBatteries");
+        bool highest = XmlText(xml, "RunLevel").Contains("Highest", StringComparison.OrdinalIgnoreCase);
+        if (!bad) return false;
+
+        if (!IsElevated())
+        {
+            message = "开机自启的任务是旧版建的（带「电池时不启动」），以管理员身份打开本程序会自动修好。";
+            return false;
+        }
+
+        bool ok = RegisterTask(out string reg);
+        message = ok
+            ? $"开机自启：已把旧任务重建为「电池供电也启动」{(highest ? "（管理员权限）" : "")}。"
+            : $"开机自启：旧任务重建失败 —— {reg}";
+        return ok;
+    }
+
+    /// <summary>立即跑一次计划任务，用来验证「开机自启」这条路真的通。</summary>
+    public static bool RunNow(out string message)
+    {
+        if (!TaskExists(out _)) { message = "没有计划任务，先打开开关"; return false; }
+        var r = Run("schtasks", new[] { "/run", "/tn", TaskName });
+        message = r.Exit == 0
+            ? "已触发计划任务（几秒后托盘里应出现 EcoCore 图标）"
+            : $"触发失败：{Trim(r.Out + r.Err)}";
+        return r.Exit == 0;
+    }
+
+    /// <summary>
+    /// 体检：把计划任务里真正决定「会不会启动」的几个开关打出来。
+    /// </summary>
+    /// <remarks>
+    /// `<c>DisallowStartIfOnBatteries</c>` 是这里最容易被忽略的一条 ——
+    /// `schtasks /create` 的默认模板把它设成 true，笔记本一拔电，登录时任务直接被跳过，
+    /// 表现就是「设置了开机自启，但开机什么都没发生」。老版本建出来的任务会一直带着这个坑。
+    /// </remarks>
+    public static string Health()
+    {
+        var xml = TaskXml();
+        if (string.IsNullOrEmpty(xml))
+            return "（没有计划任务" + (string.IsNullOrEmpty(ReadRunValue()) ? "" : "，当前靠注册表 Run 项") + "）";
+
+        var lines = new List<string>
+        {
+            $"  运行级别      : {XmlText(xml, "RunLevel")}" +
+                (IsRunLevelHighest() ? "（登录即提权，电源层生效）" : "（普通权限，电源层不生效）"),
+            $"  登录后延迟    : {XmlText(xml, "Delay")}",
+            $"  电池时禁止启动: {(XmlBool(xml, "DisallowStartIfOnBatteries") ? "是 ← 笔记本上会导致拔电后不启动" : "否（正确）")}",
+            $"  切电池时停止  : {(XmlBool(xml, "StopIfGoingOnBatteries") ? "是 ← 拔电后会被杀掉" : "否（正确）")}",
+            $"  执行时限      : {XmlText(xml, "ExecutionTimeLimit")}",
+            $"  命令          : {XmlText(xml, "Command")} {XmlText(xml, "Arguments")}"
+        };
+
+        if (XmlBool(xml, "DisallowStartIfOnBatteries") || XmlBool(xml, "StopIfGoingOnBatteries"))
+            lines.Add("  ⚠ 这条任务是老版本建的（带了「电池时不启动」）。请把「开机自动启动」关掉再打开，会按新模板重建。");
+
+        return string.Join(Environment.NewLine, lines);
     }
 
     // ───────────────────────── 注册表 ─────────────────────────

@@ -106,6 +106,11 @@ public sealed class MainForm : Form
         if (_st.StartMinimized || StartHiddenOnStart) BeginInvoke(HideToTray);
         if (StartupOpenDetail) BeginInvoke(OpenDetailWindow);
 
+        // 老版本建的计划任务带着「电池时不启动」——笔记本拔电开机直接不跑。
+        // 管理员环境下启动时顺手按新模板重建一次，用户不用自己发现。
+        if (AutoStart.RepairIfNeeded(out string repairMsg) || repairMsg.Length > 0)
+            AppendLog(repairMsg);
+
         // 开机自启：把上次用的方案（上次选中的就是 _working，已从 settings.json 恢复）重新应用一次。
         // 进程的 E 核绑定 / EcoQoS 都不跨重启保留，不重放就等于开机自启没起作用。
         if (ResumeOnStart)
